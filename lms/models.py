@@ -21,7 +21,7 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='описание', **NULLABLE)
     image = models.ImageField(upload_to='lessons/', verbose_name='превью', **NULLABLE)
     url = models.URLField(verbose_name='ссылка', **NULLABLE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', **NULLABLE)
 
 
     def __str__(self):
