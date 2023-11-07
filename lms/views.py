@@ -2,7 +2,7 @@
 from rest_framework import viewsets, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from lms.paginators import CoursePaginator, LessonPaginator
 from lms.permissions import IsOwner, IsModerator
@@ -19,30 +19,35 @@ class CourseViewSet(viewsets.ModelViewSet):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = LessonPaginator
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    #permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [AllowAny]
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    #permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    permission_classes = [AllowAny]
 
 
 
 class LessonUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    #permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    permission_classes = [AllowAny]
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsOwner]
+    #permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [AllowAny]
 
 
 class PaymentsListAPIView(generics.ListAPIView):
@@ -65,6 +70,6 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
         new_subscription.save()
 
 
-class SubscriptionDeleteAPIView(generics.DeleteAPIView):
+class SubscriptionDeleteAPIView(generics.DestroyAPIView):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
