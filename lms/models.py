@@ -37,13 +37,21 @@ class Lesson(models.Model):
 
 
 class Payments(models.Model):
+
+    payment_choices = [
+        ('cash', 'Наличные'),
+        ('credit_card', 'Оплата картой')
+    ]
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь', **NULLABLE)
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='дата оплаты', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс', **NULLABLE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='урок', **NULLABLE)
-    amount = models.IntegerField(verbose_name='сумма', **NULLABLE)
-    payment_method = models.CharField(max_length=150, verbose_name='способ оплаты', **NULLABLE)
-
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='сумма', **NULLABLE)
+    payment_method = models.CharField(max_length=150, choices=payment_choices, verbose_name='способ оплаты', **NULLABLE)
+    payment_status = models.BooleanField(default=False, verbose_name='статус оплаты')
+    payment_url = models.URLField(verbose_name='Ссылка на оплату картой', **NULLABLE)
+    payment_id = models.CharField(max_length=50, verbose_name='id платежа', **NULLABLE)
     def __str__(self):
         return f'{self.course}, {self.lesson}, {self.payment_method}, {self.amount}'
 
